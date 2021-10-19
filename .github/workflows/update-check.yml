@@ -37,7 +37,7 @@ jobs:
           git commit -m "Auto Update"
           git tag -a v${{ steps.check.outputs.stdout }} -m "Auto Update"
       - name: Push changes
-        if: ('' != '')
+        if: steps.check.outputs.stdout != ''
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
