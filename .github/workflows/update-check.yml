@@ -1,0 +1,44 @@
+name: Sync version with official
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  check_version:
+    name: clone
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          architecture: 'x64'
+      - name: Setup libs
+        run: |
+          pip install pipenv
+          pipenv sync
+      - name: Check update
+        id: check
+        run: echo "::set-output name=stdout::$(pipenv run python main.py 2>/dev/null)"
+      - name: Commit files
+        if: steps.changes.outputs.stdout != ""
+        run: |
+          git config --local user.email "github-actions@example.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git commit -m "Auto Update"
+          git tag -a -m "Auto Update"
+      - name: Push changes
+        if: "" != ""
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          branch: master
