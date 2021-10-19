@@ -35,7 +35,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add -A
           git commit -m "Auto Update"
-          git tag -a ${{ steps.check.outputs.stdout }} -m "Auto Update"
+          git tag -a v${{ steps.check.outputs.stdout }} -m "Auto Update"
       - name: Push changes
         if: ('' != '')
         uses: ad-m/github-push-action@master
