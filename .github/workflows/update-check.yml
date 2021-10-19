@@ -27,7 +27,7 @@ jobs:
           pipenv sync
       - name: Check update
         id: check
-        run: echo "::set-output name=stdout::$(pipenv run python main.py 2>/dev/null)"
+        run: echo "::set-output name=stdout::$(pipenv run python main.py ansible 2>/dev/null)"
       - name: Commit files
         if: steps.changes.outputs.stdout != ""
         run: |
